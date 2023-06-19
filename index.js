@@ -1,14 +1,18 @@
 const redux = require('redux');
+const bindActionCreators = redux.bindActionCreators;
+
+
 /*---------------------------
-Create action - CAKE_ORDERED
+Create action - ORDER_CAKE
 ---------------------------*/
-const CAKE_ORDERED = 'CAKE_ORDERED';
+const ORDER_CAKE = 'ORDER_CAKE';
 function orderCake(qty = 1){
     return {
-        type: CAKE_ORDERED,
+        type: ORDER_CAKE,
         payload: qty,
     }
 }
+
 
 const RESTOCK_CAKE = "RESTOCK_CAKE";
 function restockCake(qty = 1){
@@ -34,7 +38,7 @@ Create reducer for our application to change state based on the action
 const reducers = (state = INITITAL_STATE, action)=>{
     switch(action.type)
     {
-        case CAKE_ORDERED: return { ...state, no_of_cakes: state.no_of_cakes - action.payload}
+        case ORDER_CAKE: return { ...state, no_of_cakes: state.no_of_cakes - action.payload}
 
         case RESTOCK_CAKE: return { ...state, no_of_cakes: state.no_of_cakes + action.payload}
 
@@ -57,10 +61,15 @@ console.log("Initial State:", store.getState());
 const unsubscribe = store.subscribe(()=>{console.log("Updated State:", store.getState())})
 
 //3rd responsibility - dispatch(action) is used to update the states based on the action passed to it
-store.dispatch(orderCake(2))
+/* store.dispatch(orderCake(2))
 store.dispatch(orderCake(2)) 
 store.dispatch(orderCake(2)) 
-store.dispatch(restockCake(6))
+store.dispatch(restockCake(6)) or use bindActionCreators */
+const actions = bindActionCreators({orderCake, restockCake}, store.dispatch);
+actions.orderCake(2);
+actions.orderCake(2);
+actions.orderCake(1);
+actions.restockCake(5);
 
 //5th responsibility - call func() returned by subscribe(listener) to unsubscribe the listener
 unsubscribe()
