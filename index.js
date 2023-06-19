@@ -3,10 +3,18 @@ const redux = require('redux');
 Create action - CAKE_ORDERED
 ---------------------------*/
 const CAKE_ORDERED = 'CAKE_ORDERED';
-function orderCake(){
+function orderCake(qty = 1){
     return {
         type: CAKE_ORDERED,
-        quantity: 1,
+        payload: qty,
+    }
+}
+
+const RESTOCK_CAKE = "RESTOCK_CAKE";
+function restockCake(qty = 1){
+    return {
+        type: RESTOCK_CAKE,
+        payload: qty
     }
 }
 
@@ -26,7 +34,10 @@ Create reducer for our application to change state based on the action
 const reducers = (state = INITITAL_STATE, action)=>{
     switch(action.type)
     {
-        case CAKE_ORDERED: return { ...state, no_of_cakes: state.no_of_cakes - 1}
+        case CAKE_ORDERED: return { ...state, no_of_cakes: state.no_of_cakes - action.payload}
+
+        case RESTOCK_CAKE: return { ...state, no_of_cakes: state.no_of_cakes + action.payload}
+
         default: return state
 
     }
@@ -46,9 +57,10 @@ console.log("Initial State:", store.getState());
 const unsubscribe = store.subscribe(()=>{console.log("Updated State:", store.getState())})
 
 //3rd responsibility - dispatch(action) is used to update the states based on the action passed to it
-store.dispatch(orderCake())
-store.dispatch(orderCake()) //this liine is for fun
-store.dispatch(orderCake()) //this one too is for fun
+store.dispatch(orderCake(2))
+store.dispatch(orderCake(2)) 
+store.dispatch(orderCake(2)) 
+store.dispatch(restockCake(6))
 
 //5th responsibility - call func() returned by subscribe(listener) to unsubscribe the listener
 unsubscribe()
