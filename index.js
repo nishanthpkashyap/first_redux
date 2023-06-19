@@ -1,5 +1,8 @@
 const redux = require('redux');
 const bindActionCreators = redux.bindActionCreators;
+const applyMiddleware = redux.applyMiddleware;
+const reduxLogger = require('redux-logger'); //Logger middleware
+const logger = reduxLogger.createLogger();
 
 
 /*---------------------------
@@ -84,13 +87,13 @@ const icecreamReducer = (state = INITIAL_ICECREAM_STATE, action)=>{
 --------------------------------------------*/
 //1st responsibility - Create a store by passing the root reducer obtained by combining multiple reducers so that states can be changed based on the action
 const rootReducer = redux.combineReducers({cake: cakeReducer, icecream: icecreamReducer})
-const store = redux.createStore(rootReducer)
+const store = redux.createStore(rootReducer, applyMiddleware(logger))
 
 //2nd responsibility - getState() to access states from the store
-console.log("Initial State:", store.getState());
+console.log("Initial State:", store.getState()); //this line not required if we have logger middleware
 
 //4th responsibility - subscribe(listener), here listener func() is called when states is updated which can be as simple as logging the updated states
-const unsubscribe = store.subscribe(()=>{console.log("Updated State:", store.getState())})
+const unsubscribe = store.subscribe(()=>{})
 
 //3rd responsibility - dispatch(action) is used to update the states based on the action passed to it
 /* store.dispatch(orderCake(2))
