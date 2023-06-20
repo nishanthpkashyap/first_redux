@@ -1,8 +1,7 @@
 const redux = require('redux');
 const bindActionCreators = redux.bindActionCreators;
 const applyMiddleware = redux.applyMiddleware;
-const reduxLogger = require('redux-logger'); //Logger middleware
-const logger = reduxLogger.createLogger();
+const logger = require('redux-logger').createLogger(); //Logger middleware
 
 
 /*---------------------------
